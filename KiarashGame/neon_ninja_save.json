@@ -1,0 +1,40 @@
+{
+  "settings": {
+    "sfx_volume": 0.7,
+    "music_volume": 0.5,
+    "difficulty": 1.0,
+    "screen_shake": true
+  },
+  "achievements": {
+    "first_kill": true,
+    "kill_10": false,
+    "kill_50": false,
+    "kill_100": false,
+    "combo_5": false,
+    "combo_10": false,
+    "wall_jump": false,
+    "dash_master": true,
+    "shuriken_20": false,
+    "slow_mo": false,
+    "level_3": false,
+    "level_5": false,
+    "score_5000": false,
+    "score_20000": false,
+    "boss_kill": false
+  },
+  "highscore": 0,
+  "game_history": [
+    {
+      "score": 200,
+      "level": 1,
+      "duration": 26,
+      "date": "2026-09-13 16:53",
+      "achievements": [
+        "DASH MASTER",
+        "FIRST BLOOD"
+      ]
+    }
+  ],
+  "total_kills": 2,
+  "total_bosses": 0
+}

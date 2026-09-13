@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kiarash Game{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============ RESET ============ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --neon-cyan: #00e6ff;
+            --neon-pink: #ff00aa;
+            --neon-purple: #b300ff;
+            --neon-green: #00ff88;
+            --neon-yellow: #ffe600;
+            --dark-bg: #05030f;
+            --dark-card: #0a0616;
+            --dark-panel: #0d0820;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0c0;
+            --text-muted: #606080;
+        }
+
+        body {
+            font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        /* ============ BACKGROUND ============ */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 230, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 230, 255, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(179, 0, 255, 0.18), transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(0, 230, 255, 0.14), transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 170, 0.08), transparent 55%);
+            z-index: -1;
+            pointer-events: none;
+            animation: pulse-bg 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse-bg {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.75; }
+        }
+
+        /* ============ NAVBAR ============ */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: rgba(5, 3, 15, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 230, 255, 0.25);
+            padding: 1rem 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 230, 255, 0.08);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            transition: transform 0.3s;
+        }
+        .logo:hover { transform: scale(1.05); }
+
+        .logo-icon {
+            font-size: 1.7rem;
+            filter: drop-shadow(0 0 8px var(--neon-cyan));
+        }
+
+        .logo-text { color: #fff; }
+
+        .logo-accent {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+        }
+
+        .nav-links { display: flex; gap: 1rem; align-items: center; }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 230, 255, 0.1);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 230, 255, 0.35);
+        }
+
+        .nav-link-primary {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #000;
+            font-weight: 700;
+        }
+        .nav-link-primary:hover {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+            color: #000;
+            box-shadow: 0 0 25px rgba(179, 0, 255, 0.6);
+        }
+
+        .nav-link-logout:hover {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+            background: rgba(255, 0, 170, 0.1);
+            box-shadow: 0 0 15px rgba(255, 0, 170, 0.35);
+        }
+
+        /* ============ MESSAGES ============ */
+        .messages-container {
+            max-width: 1400px;
+            margin: 1rem auto;
+            padding: 0 2rem;
+        }
+
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            border-right: 4px solid;
+            animation: slideIn 0.4s ease-out;
+        }
+        .message-success {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+        .message-error {
+            background: rgba(255, 0, 80, 0.1);
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(0, 230, 255, 0.15);
+            color: var(--text-muted);
+        }
+        .footer-main {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 3px;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .footer-sub { font-size: 0.9rem; }
+
+        /* ============ MAIN ============ */
+        .main-content {
+            min-height: calc(100vh - 200px);
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{% url 'home' %}" class="logo">
+            <span class="logo-icon">🎮</span>
+            <span class="logo-text">KIARASH<span class="logo-accent">GAME</span></span>
+        </a>
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="nav-link">
+                    <span>👤</span><span>{{ user.username }}</span>
+                </a>
+                <a href="{% url 'logout' %}" class="nav-link nav-link-logout">
+                    <span>🚪</span><span>Logout</span>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link">Login</a>
+                <a href="{% url 'signup' %}" class="nav-link nav-link-primary">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+{% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="message message-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <p class="footer-main">© 2025 KIARASH GAME</p>
+    <p class="footer-sub">A Neon Arcade Experience</p>
+</footer>
+
+<script>
+    // ============ MESSAGE AUTO-HIDE ============
+    document.addEventListener('DOMContentLoaded', function () {
+        const messages = document.querySelectorAll('.message');
+        messages.forEach((msg, i) => {
+            setTimeout(() => {
+                msg.style.transition = 'opacity 0.5s, transform 0.5s';
+                msg.style.opacity = '0';
+                msg.style.transform = 'translateX(50px)';
+                setTimeout(() => msg.remove(), 500);
+            }, 3000 + i * 200);
+        });
+    });
+
+    // ============ CARD CLICK ANIMATION ============
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', function (e) {
+                if (e.target.closest('.play-btn')) return;
+                const btn = this.querySelector('.play-btn');
+                if (btn) btn.click();
+            });
+        });
+    });
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

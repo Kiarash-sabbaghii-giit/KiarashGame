@@ -1,0 +1,330 @@
+{% extends 'games/base.html' %}
+{% block title %}Kiarash Game — Home{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero {
+        text-align: center;
+        padding: 5rem 2rem 3rem;
+    }
+
+    .hero-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-weight: 900;
+        letter-spacing: 4px;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+    }
+
+    .neon-text-cyan {
+        color: var(--neon-cyan);
+        text-shadow:
+            0 0 10px var(--neon-cyan),
+            0 0 30px var(--neon-cyan),
+            0 0 60px var(--neon-cyan);
+        animation: flicker 3s infinite;
+    }
+
+    .neon-text-pink {
+        color: var(--neon-pink);
+        text-shadow:
+            0 0 10px var(--neon-pink),
+            0 0 30px var(--neon-pink),
+            0 0 60px var(--neon-pink);
+        animation: flicker 3s infinite 0.5s;
+    }
+
+    @keyframes flicker {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.85; }
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        color: var(--text-secondary);
+        margin-bottom: 2.5rem;
+        letter-spacing: 1px;
+    }
+
+    .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 3.5rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .stat-value {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--neon-cyan);
+        text-shadow: 0 0 20px var(--neon-cyan);
+    }
+
+    .stat-label {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        letter-spacing: 2px;
+        font-weight: 600;
+    }
+
+    .games-section {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 3rem;
+        letter-spacing: 3px;
+    }
+
+    .section-line {
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+        box-shadow: 0 0 15px var(--neon-cyan);
+        max-width: 200px;
+    }
+
+    .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .game-card {
+        background: var(--dark-card);
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(0, 230, 255, 0.15);
+    }
+
+    .game-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: var(--neon-cyan);
+        box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.5),
+            0 0 30px rgba(0, 230, 255, 0.35),
+            0 0 60px rgba(179, 0, 255, 0.2);
+    }
+
+    .card-image-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        background: #000;
+    }
+
+    .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .game-card:hover .card-image { transform: scale(1.1); }
+
+    .card-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            transparent 40%,
+            rgba(5, 3, 15, 0.85) 100%
+        );
+        pointer-events: none;
+    }
+
+    .card-content {
+        padding: 1.2rem;
+        position: relative;
+    }
+
+    .card-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px;
+        transition: color 0.3s;
+    }
+
+    .game-card:hover .card-title {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    .card-description {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        line-height: 1.4;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .card-plays {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .plays-icon { color: var(--neon-pink); font-size: 0.7rem; }
+
+    .play-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.55rem 1.4rem;
+        background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+        color: #000;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 1.5px;
+        transition: all 0.3s;
+        box-shadow: 0 0 15px rgba(0, 230, 255, 0.4);
+    }
+
+    .play-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(0, 230, 255, 0.8);
+    }
+
+    .play-btn-locked {
+        background: linear-gradient(135deg, #444, #666);
+        color: #ccc;
+        box-shadow: none;
+    }
+
+    .card-border {
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
+        border: 2px solid transparent;
+        pointer-events: none;
+        transition: border-color 0.4s;
+    }
+
+    .game-card:hover .card-border {
+        border-color: rgba(0, 230, 255, 0.5);
+        box-shadow: inset 0 0 30px rgba(0, 230, 255, 0.15);
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-muted);
+    }
+    .empty-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1 class="hero-title">
+        <span class="neon-text-cyan">KIARASH</span>
+        <span class="neon-text-pink">GAME</span>
+    </h1>
+    <p class="hero-subtitle">A Collection of 20 Neon Arcade Games</p>
+
+    <div class="hero-stats">
+        <div class="stat-item">
+            <span class="stat-value">{{ total_games }}</span>
+            <span class="stat-label">GAMES</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">{{ total_plays }}</span>
+            <span class="stat-label">PLAYS</span>
+        </div>
+    </div>
+</section>
+
+<section class="games-section">
+    <h2 class="section-title">
+        <span class="section-line"></span>
+        <span>GAMES</span>
+        <span class="section-line"></span>
+    </h2>
+
+    <div class="games-grid">
+        {% for game in games %}
+        <div class="game-card">
+            <div class="card-image-wrapper">
+                <img src="{{ game.get_cover_url }}" alt="{{ game.title }}" class="card-image">
+                <div class="card-overlay"></div>
+            </div>
+
+            <div class="card-content">
+                <h3 class="card-title">{{ game.title }}</h3>
+
+                {% if game.description %}
+                    <p class="card-description">{{ game.description }}</p>
+                {% endif %}
+
+                <div class="card-footer">
+                    <div class="card-plays">
+                        <span class="plays-icon">▶</span>
+                        <span>{{ game.plays }}</span>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'play_game' game.slug %}" class="play-btn">PLAY</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="play-btn play-btn-locked">LOGIN</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card-border"></div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <p class="empty-title">No games yet</p>
+            <p>Go to the admin panel and add games.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

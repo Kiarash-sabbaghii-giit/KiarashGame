@@ -1,0 +1,114 @@
+"""
+Seed script: Automatically add all 20 games to the database.
+Run: python manage.py shell < seed_games.py
+Or:  python seed_games.py (after setting up Django)
+"""
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'KiarashGame.settings')
+django.setup()
+
+from games.models import Game
+
+
+# List of all 20 games
+# (order, title, slug, cover_image, game_file, description)
+GAMES_DATA = [
+    (1,  "Neon Space Shooter",  "neon-space-shooter",  "1.png",  "neon_space_shooter.py",
+     "Classic space shooter with neon graphics, power-ups, and epic boss fights."),
+
+    (2,  "Brick Breaker",       "brick-breaker",       "2.png",  "brick_breaker.py",
+     "Smash through neon bricks with multiball, lasers, and powerful pickups."),
+
+    (3,  "Neon Racer",          "neon-racer",          "3.png",  "neon_racer.py",
+     "High-speed cyberpunk racing with boost, obstacles, and endless highways."),
+
+    (4,  "Neon Snake",          "neon-snake",          "4.png",  "neon_snake.py",
+     "Modern neon take on the classic Snake. Grow, dodge, and survive."),
+
+    (5,  "Neon Tetris",         "neon-tetris",         "5.png",  "neon_tetris.py",
+     "Glowing block puzzle with combos, T-spins, and marathon mode."),
+
+    (6,  "Asteroid Hunter",     "asteroid-hunter",     "6.png",  "asteroid_hunter.py",
+     "Destroy asteroids, dodge UFOs, and survive the neon space storm."),
+
+    (7,  "Neon Ninja",          "neon-ninja",          "7.png",  "neon_ninja.py",
+     "Slicing cyberpunk action with wall jumps, shurikens, and combo attacks."),
+
+    (8,  "Neon Archer",         "neon-archer",         "8.png",  "neon_archer.py",
+     "Aim with your mouse and shoot arrows at waves of incoming enemies."),
+
+    (9,  "Neon Pong",           "neon-pong",           "9.png",  "neon_pong.py",
+     "Reimagined Pong with power-ups, multiball, and fierce AI opponents."),
+
+    (10, "Neon Pac-Man",        "neon-pacman",         "10.png", "neon_pacman.py",
+     "Eat pellets, dodge ghosts, and chase the high score in this neon maze."),
+
+    (11, "Neon Defender",       "neon-defender",       "11.png", "neon_defender.py",
+     "Tower defense with 5 tower types, enemy waves, and boss battles."),
+
+    (12, "Ninja vs Samurai",    "ninja-vs-samurai",    "12.png", "neon_ninja_vs_samurai.py",
+     "1v1 fighting game with combos, special moves, and AI opponents."),
+
+    (13, "Neon Fisher",         "neon-fisher",         "13.png", "neon_fisher.py",
+     "Relaxing neon fishing with hooks, coins, power-ups, and frenzy mode."),
+
+    (14, "Neon Helicopter",     "neon-helicopter",     "14.png", "neon_helicopter.py",
+     "Flappy-style flying adventure with obstacles, coins, and boss fights."),
+
+    (15, "Neon Darts",          "neon-darts",          "15.png", "neon_darts.py",
+     "Classic darts with 301/501/Cricket modes and realistic physics."),
+
+    (16, "Neon 2048",           "neon-2048",           "16.png", "neon_2048.py",
+     "Merge glowing tiles to reach 2048 and beyond with smooth animations."),
+
+    (17, "Neon Tower Stack",    "neon-tower-stack",    "17.png", "neon_tower_stack.py",
+     "Build the tallest neon tower by stacking blocks with perfect timing."),
+
+    (18, "Neon Minesweeper",    "neon-minesweeper",    "18.png", "neon_minesweeper.py",
+     "Classic minesweeper with neon graphics, power-ups, and 3 difficulties."),
+
+    (19, "Neon Slots",          "neon-slots",          "19.png", "neon_slots.py",
+     "Spin the reels, hit jackpots, and trigger free spins in neon slots."),
+
+    (20, "Neon Archery",        "neon-archery",        "20.png", "neon_archery.py",
+     "Aim, draw, and release. Target practice, time attack, and campaign modes."),
+]
+
+
+def seed_games():
+    print("\n" + "=" * 60)
+    print("  SEEDING 20 GAMES INTO DATABASE")
+    print("=" * 60 + "\n")
+
+    created_count = 0
+    updated_count = 0
+    skipped_count = 0
+
+    for order, title, slug, cover, game_file, description in GAMES_DATA:
+        obj, created = Game.objects.update_or_create(
+            slug=slug,
+            defaults={
+                'title': title,
+                'description': description,
+                'cover_image': cover,
+                'game_file': game_file,
+                'order': order,
+            }
+        )
+        if created:
+            created_count += 1
+            print(f"  [+] Added:   {order:2d}. {title}")
+        else:
+            updated_count += 1
+            print(f"  [~] Updated: {order:2d}. {title}")
+
+    print("\n" + "=" * 60)
+    print(f"  Created: {created_count}  |  Updated: {updated_count}")
+    print(f"  Total games in database: {Game.objects.count()}")
+    print("=" * 60 + "\n")
+
+
+if __name__ == "__main__":
+    seed_games()

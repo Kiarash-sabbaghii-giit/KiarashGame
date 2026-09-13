@@ -1,0 +1,202 @@
+{% extends 'games/base.html' %}
+{% block title %}Profile — Kiarash Game{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: #000;
+        margin: 0 auto 1rem;
+        box-shadow:
+            0 0 40px rgba(0, 230, 255, 0.5),
+            0 0 80px rgba(179, 0, 255, 0.3);
+        animation: pulse-avatar 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-avatar {
+        0%, 100% { box-shadow: 0 0 40px rgba(0, 230, 255, 0.5), 0 0 80px rgba(179, 0, 255, 0.3); }
+        50% { box-shadow: 0 0 60px rgba(0, 230, 255, 0.8), 0 0 100px rgba(179, 0, 255, 0.5); }
+    }
+
+    .profile-name {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--neon-cyan);
+        text-shadow: 0 0 20px var(--neon-cyan);
+        letter-spacing: 3px;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-joined {
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+
+    .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: var(--dark-panel);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid rgba(0, 230, 255, 0.25);
+        transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 30px rgba(0, 230, 255, 0.3);
+        transform: translateY(-3px);
+    }
+
+    .stat-value {
+        display: block;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 3rem;
+        font-weight: 900;
+        color: var(--neon-pink);
+        text-shadow: 0 0 20px var(--neon-pink);
+        margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        font-weight: 600;
+    }
+
+    .history-section {
+        background: var(--dark-panel);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid rgba(0, 230, 255, 0.2);
+    }
+
+    .section-title-small {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.3rem;
+        color: var(--neon-cyan);
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    .history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .history-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 230, 255, 0.15);
+        transition: all 0.3s;
+    }
+
+    .history-item:hover {
+        border-color: var(--neon-cyan);
+        background: rgba(0, 230, 255, 0.05);
+    }
+
+    .history-image {
+        width: 60px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .history-info { flex: 1; }
+
+    .history-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 0.2rem;
+    }
+
+    .history-date {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-muted);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+
+    <div class="profile-header">
+        <div class="profile-avatar">{{ user.username|first|upper }}</div>
+        <h1 class="profile-name">{{ user.username }}</h1>
+        <p class="profile-joined">Joined {{ user.date_joined|date:"M d, Y" }}</p>
+    </div>
+
+    <div class="profile-stats">
+        <div class="stat-card">
+            <span class="stat-value">{{ profile.total_plays }}</span>
+            <span class="stat-label">TOTAL PLAYS</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ history.count }}</span>
+            <span class="stat-label">RECENT GAMES</span>
+        </div>
+    </div>
+
+    <div class="history-section">
+        <h2 class="section-title-small">RECENT HISTORY</h2>
+
+        <div class="history-list">
+            {% for item in history %}
+            <div class="history-item">
+                <img src="{{ item.game.get_cover_url }}" class="history-image" alt="{{ item.game.title }}">
+                <div class="history-info">
+                    <h3 class="history-title">{{ item.game.title }}</h3>
+                    <p class="history-date">{{ item.played_at|date:"M d, Y — H:i" }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p class="empty-state">You haven't played any games yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

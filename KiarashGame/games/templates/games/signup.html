@@ -1,0 +1,194 @@
+{% extends 'games/base.html' %}
+{% block title %}Sign Up — Kiarash Game{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 220px);
+        padding: 3rem 2rem;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 460px;
+        background: var(--dark-panel);
+        border-radius: 20px;
+        padding: 3rem 2.5rem;
+        border: 1px solid rgba(255, 0, 170, 0.3);
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.6),
+            0 0 40px rgba(255, 0, 170, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
+        box-shadow: 0 0 20px var(--neon-pink);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .auth-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        filter: drop-shadow(0 0 15px var(--neon-pink));
+    }
+
+    .auth-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: var(--neon-pink);
+        letter-spacing: 4px;
+        text-shadow: 0 0 20px var(--neon-pink);
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .auth-form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .form-group label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .form-input {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 0, 170, 0.25);
+        border-radius: 10px;
+        padding: 0.9rem 1rem;
+        color: #fff;
+        font-size: 1rem;
+        font-family: inherit;
+        outline: none;
+        transition: all 0.3s;
+    }
+
+    .form-input:focus {
+        border-color: var(--neon-pink);
+        box-shadow: 0 0 20px rgba(255, 0, 170, 0.3);
+        background: rgba(255, 0, 170, 0.05);
+    }
+
+    .form-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .auth-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 1rem;
+        margin-top: 0.5rem;
+        background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1rem;
+        font-weight: 900;
+        letter-spacing: 3px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 0 25px rgba(255, 0, 170, 0.4);
+    }
+
+    .auth-btn:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.4),
+            0 0 40px rgba(255, 0, 170, 0.8);
+    }
+
+    .btn-arrow {
+        transition: transform 0.3s;
+        font-size: 1.2rem;
+    }
+    .auth-btn:hover .btn-arrow { transform: translateX(5px); }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 0, 170, 0.15);
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .auth-link {
+        color: var(--neon-pink);
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s;
+    }
+
+    .auth-link:hover {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 15px var(--neon-cyan);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <span class="auth-icon">✨</span>
+            <h2 class="auth-title">SIGN UP</h2>
+            <p class="auth-subtitle">Create your player profile</p>
+        </div>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" required autofocus class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password1" required class="form-input">
+                <small class="form-hint">Min 8 characters, not all digits.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" name="password2" required class="form-input">
+            </div>
+
+            <button type="submit" class="auth-btn">
+                <span>CREATE ACCOUNT</span>
+                <span class="btn-arrow">→</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{% url 'login' %}" class="auth-link">Login</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
