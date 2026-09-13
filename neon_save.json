@@ -1,0 +1,31 @@
+{
+  "settings": {
+    "sfx_volume": 0.355,
+    "music_volume": 0.3,
+    "difficulty": 1.5,
+    "screen_shake": true
+  },
+  "achievements": {
+    "first_blood": true,
+    "combo_5": false,
+    "combo_10": false,
+    "score_500": true,
+    "score_2000": true,
+    "score_5000": false,
+    "boss_kill": true,
+    "boss_3": false,
+    "survive_2min": true
+  },
+  "highscore": 2311,
+  "boss_kills": 2,
+  "game_history": [
+    {
+      "score": 0,
+      "bosses": 0,
+      "duration": 7,
+      "level": 1,
+      "date": "2026-09-13 10:28",
+      "achievements": []
+    }
+  ]
+}

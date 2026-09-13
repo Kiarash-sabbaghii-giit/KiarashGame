@@ -1,0 +1,56 @@
+{
+  "settings": {
+    "sfx_volume": 0.7,
+    "music_volume": 0.5,
+    "start_level": 1,
+    "ghost_piece": true,
+    "screen_shake": true
+  },
+  "achievements": {
+    "first_line": false,
+    "lines_10": false,
+    "lines_50": false,
+    "lines_100": false,
+    "tetris": false,
+    "tetris_x2": false,
+    "score_1000": false,
+    "score_5000": false,
+    "score_10000": false,
+    "score_50000": false,
+    "level_5": false,
+    "level_10": false,
+    "level_15": false,
+    "hold_used": false,
+    "combo_5": false
+  },
+  "highscore": 0,
+  "game_history": [
+    {
+      "score": 20,
+      "lines": 0,
+      "level": 1,
+      "duration": 53,
+      "mode": "marathon",
+      "date": "2026-09-13 11:20",
+      "achievements": []
+    },
+    {
+      "score": 244,
+      "lines": 0,
+      "level": 1,
+      "duration": 16,
+      "mode": "sprint",
+      "date": "2026-09-13 11:20",
+      "achievements": []
+    },
+    {
+      "score": 300,
+      "lines": 0,
+      "level": 1,
+      "duration": 34,
+      "mode": "ultra",
+      "date": "2026-09-13 11:21",
+      "achievements": []
+    }
+  ]
+}

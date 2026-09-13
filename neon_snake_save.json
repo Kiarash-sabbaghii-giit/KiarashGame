@@ -1,0 +1,38 @@
+{
+  "settings": {
+    "sfx_volume": 0.7,
+    "music_volume": 0.5,
+    "speed_mode": "normal",
+    "wrap_mode": false,
+    "screen_shake": true
+  },
+  "achievements": {
+    "first_food": false,
+    "length_10": false,
+    "length_20": false,
+    "length_40": false,
+    "score_500": true,
+    "score_2000": false,
+    "score_5000": false,
+    "combo_5": false,
+    "combo_10": false,
+    "power_5": false,
+    "power_15": false,
+    "survive_1min": false,
+    "survive_3min": false,
+    "magnet_use": false,
+    "boss_hit": false
+  },
+  "highscore": 1839,
+  "game_history": [
+    {
+      "score": 1839,
+      "length": 9,
+      "duration": 30,
+      "date": "2026-09-13 11:16",
+      "achievements": [
+        "ROOKIE"
+      ]
+    }
+  ]
+}

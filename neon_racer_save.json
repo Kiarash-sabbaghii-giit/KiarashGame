@@ -1,0 +1,52 @@
+{
+  "settings": {
+    "sfx_volume": 0.7,
+    "music_volume": 0.5,
+    "difficulty": 1.0,
+    "screen_shake": true
+  },
+  "achievements": {
+    "first_dodge": true,
+    "speed_500": true,
+    "speed_1000": false,
+    "score_1000": false,
+    "score_5000": false,
+    "score_10000": false,
+    "boost_5": false,
+    "survive_1min": false,
+    "survive_3min": false,
+    "tunnel_master": false,
+    "boss_dodge": false,
+    "obstacle_10": false
+  },
+  "highscore": 2004,
+  "game_history": [
+    {
+      "score": 956,
+      "speed": 230,
+      "duration": 5,
+      "date": "2026-09-13 11:11",
+      "achievements": [
+        "FIRST DODGE"
+      ]
+    },
+    {
+      "score": 1451,
+      "speed": 658,
+      "duration": 3,
+      "date": "2026-09-13 11:11",
+      "achievements": [
+        "SPEED DEMON"
+      ]
+    },
+    {
+      "score": 2004,
+      "speed": 658,
+      "duration": 3,
+      "date": "2026-09-13 11:11",
+      "achievements": []
+    }
+  ],
+  "total_tunnels": 0,
+  "total_bosses_dodged": 0
+}
