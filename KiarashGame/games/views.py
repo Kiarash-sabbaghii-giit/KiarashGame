@@ -34,6 +34,28 @@ def home(request):
 
     return render(request, 'games/home.html', context)
 
+def game_detail(request, slug):
+    """صفحه‌ی جزئیات بازی"""
+    game = get_object_or_404(Game, slug=slug)
+
+    # بازی‌های مشابه (بر اساس order)
+    similar_games = Game.objects.exclude(id=game.id).order_by('order')[:4]
+
+    # اگه کاربر لاگین باشه، ببین قبلاً این بازی رو کرده یا نه
+    last_played = None
+    if request.user.is_authenticated:
+        last_played = PlayHistory.objects.filter(
+            user=request.user,
+            game=game
+        ).first()
+
+    context = {
+        'game': game,
+        'similar_games': similar_games,
+        'last_played': last_played,
+    }
+    return render(request, 'games/game_detail.html', context)
+
 
 @login_required
 def play_game(request, slug):

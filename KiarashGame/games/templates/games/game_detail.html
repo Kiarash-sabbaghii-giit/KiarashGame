@@ -1,0 +1,545 @@
+{% extends 'games/base.html' %}
+{% block title %}{{ game.title }} — Kiarash Game{% endblock %}
+
+{% block extra_css %}
+<style>
+    .game-detail {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+
+    /* ============ BREADCRUMB ============ */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .breadcrumb a {
+        color: var(--neon-cyan);
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--neon-pink);
+        text-shadow: 0 0 10px var(--neon-pink);
+    }
+
+    .breadcrumb-sep {
+        color: var(--text-muted);
+    }
+
+    .breadcrumb-current {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    /* ============ MAIN GRID ============ */
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+
+    /* ============ DEMO SECTION ============ */
+    .demo-wrapper {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #000;
+        border: 2px solid rgba(0, 230, 255, 0.3);
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.6),
+            0 0 40px rgba(0, 230, 255, 0.2);
+    }
+
+    .demo-wrapper::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 20px;
+        padding: 2px;
+        background: linear-gradient(45deg,
+            var(--neon-cyan),
+            var(--neon-pink),
+            var(--neon-purple),
+            var(--neon-cyan));
+        background-size: 300% 300%;
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        animation: rgb-rotate 4s linear infinite;
+        z-index: 2;
+    }
+
+    @keyframes rgb-rotate {
+        from { background-position: 0% 50%; }
+        to { background-position: 300% 50%; }
+    }
+
+    .demo-image {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+    }
+
+    .demo-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: rgba(0, 0, 0, 0.7);
+        color: var(--neon-green);
+        padding: 0.4rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        border: 1px solid var(--neon-green);
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        animation: live-pulse 1.5s ease-in-out infinite;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        z-index: 3;
+    }
+
+    @keyframes live-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+    }
+
+    .live-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--neon-green);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--neon-green);
+    }
+
+    /* ============ INFO SECTION ============ */
+    .info-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .game-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        font-weight: 900;
+        color: var(--neon-cyan);
+        text-shadow:
+            0 0 15px var(--neon-cyan),
+            0 0 30px rgba(0, 230, 255, 0.5);
+        letter-spacing: 2px;
+        line-height: 1.2;
+        animation: title-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes title-glow {
+        0%, 100% {
+            text-shadow:
+                0 0 15px var(--neon-cyan),
+                0 0 30px rgba(0, 230, 255, 0.5);
+        }
+        50% {
+            text-shadow:
+                0 0 25px var(--neon-cyan),
+                0 0 50px var(--neon-cyan),
+                0 0 80px rgba(255, 0, 170, 0.5);
+        }
+    }
+
+    /* ============ STATS ROW ============ */
+    .stats-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-chip {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1rem;
+        background: rgba(0, 230, 255, 0.05);
+        border: 1px solid rgba(0, 230, 255, 0.2);
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .stat-chip:hover {
+        background: rgba(0, 230, 255, 0.1);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 15px rgba(0, 230, 255, 0.3);
+    }
+
+    .stat-chip-icon {
+        font-size: 1.1rem;
+    }
+
+    .stat-chip-value {
+        color: #fff;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+    }
+
+    /* ============ DESCRIPTION ============ */
+    .description-box {
+        padding: 1.2rem;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 230, 255, 0.15);
+        border-radius: 12px;
+        border-right: 3px solid var(--neon-cyan);
+    }
+
+    .description-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--neon-cyan);
+        letter-spacing: 2px;
+        margin-bottom: 0.6rem;
+        text-transform: uppercase;
+    }
+
+    .description-text {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+    }
+
+    /* ============ PLAY BUTTON ============ */
+    .play-btn-large {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        padding: 1.2rem 2.5rem;
+        background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+        background-size: 200% 200%;
+        color: #000;
+        text-decoration: none;
+        border-radius: 14px;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+        transition: all 0.3s;
+        box-shadow:
+            0 0 30px rgba(0, 230, 255, 0.5),
+            0 0 60px rgba(179, 0, 255, 0.3);
+        animation: gradient-shift 4s ease infinite;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes gradient-shift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .play-btn-large::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transform: translateX(-100%);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .play-btn-large:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow:
+            0 15px 40px rgba(0, 0, 0, 0.4),
+            0 0 50px rgba(0, 230, 255, 0.8),
+            0 0 100px rgba(179, 0, 255, 0.5);
+    }
+
+    .play-btn-large .icon {
+        font-size: 1.5rem;
+        filter: drop-shadow(0 0 5px #000);
+    }
+
+    .play-btn-locked-large {
+        background: linear-gradient(135deg, #555, #777);
+        color: #ddd;
+        animation: none;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .play-btn-locked-large:hover {
+        box-shadow:
+            0 15px 40px rgba(0, 0, 0, 0.4),
+            0 0 30px rgba(255, 0, 170, 0.5);
+    }
+
+    /* ============ META INFO ============ */
+    .meta-box {
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .meta-row:last-child {
+        border-bottom: none;
+    }
+
+    .meta-label {
+        color: var(--text-muted);
+        letter-spacing: 1px;
+    }
+
+    .meta-value {
+        color: #fff;
+        font-weight: 700;
+        font-family: 'Orbitron', sans-serif;
+    }
+
+    .meta-value.green {
+        color: var(--neon-green);
+    }
+
+    .meta-value.pink {
+        color: var(--neon-pink);
+    }
+
+    /* ============ SIMILAR GAMES ============ */
+    .similar-section {
+        margin-top: 5rem;
+    }
+
+    .similar-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.5rem;
+        color: #fff;
+        letter-spacing: 3px;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .similar-title::before,
+    .similar-title::after {
+        content: '';
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(90deg,
+            transparent,
+            var(--neon-cyan),
+            var(--neon-pink),
+            transparent);
+        background-size: 200% 100%;
+        animation: rgb-sweep 3s linear infinite;
+        max-width: 200px;
+    }
+
+    @keyframes rgb-sweep {
+        from { background-position: 0% 0; }
+        to { background-position: 200% 0; }
+    }
+
+    .similar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .similar-card {
+        background: var(--dark-card);
+        border-radius: 12px;
+        overflow: hidden;
+        text-decoration: none;
+        border: 1px solid rgba(0, 230, 255, 0.15);
+        transition: all 0.3s;
+        display: block;
+    }
+
+    .similar-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--neon-cyan);
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 25px rgba(0, 230, 255, 0.3);
+    }
+
+    .similar-card-image {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+        display: block;
+    }
+
+    .similar-card-title {
+        padding: 0.8rem;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+        transition: color 0.3s;
+    }
+
+    .similar-card:hover .similar-card-title {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 900px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .game-detail {
+            padding: 2rem 1rem;
+        }
+        .play-btn-large {
+            padding: 1rem 1.8rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="game-detail">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="{% url 'home' %}">🏠 Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <a href="{% url 'home' %}">Games</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">{{ game.title }}</span>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="detail-grid">
+
+        <!-- Left: Demo GIF -->
+        <div>
+            <div class="demo-wrapper">
+                <div class="demo-badge">
+                    <span class="live-dot"></span>
+                    PREVIEW
+                </div>
+                <img
+                    src="{{ game.get_demo_url }}"
+                    alt="{{ game.title }} demo"
+                    class="demo-image"
+                >
+            </div>
+        </div>
+
+        <!-- Right: Info -->
+        <div class="info-wrapper">
+
+            <h1 class="game-title">{{ game.title }}</h1>
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-chip">
+                    <span class="stat-chip-icon">▶</span>
+                    <span class="stat-chip-value">{{ game.plays }}</span>
+                    <span>plays</span>
+                </div>
+                <div class="stat-chip">
+                    <span class="stat-chip-icon">🎮</span>
+                    <span>Game #{{ game.order }}</span>
+                </div>
+                {% if last_played %}
+                <div class="stat-chip">
+                    <span class="stat-chip-icon">🕐</span>
+                    <span>Last played {{ last_played.played_at|date:"M d" }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Description -->
+            {% if game.description %}
+            <div class="description-box">
+                <div class="description-title">About this game</div>
+                <p class="description-text">{{ game.description }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Play Button -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'play_game' game.slug %}" class="play-btn-large">
+                    <span class="icon">▶</span>
+                    <span>PLAY NOW</span>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="play-btn-large play-btn-locked-large">
+                    <span class="icon">🔒</span>
+                    <span>LOGIN TO PLAY</span>
+                </a>
+            {% endif %}
+
+            <!-- Meta Info -->
+            <div class="meta-box">
+                <div class="meta-row">
+                    <span class="meta-label">File</span>
+                    <span class="meta-value">{{ game.game_file }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Added</span>
+                    <span class="meta-value green">{{ game.created_at|date:"M d, Y" }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Total Plays</span>
+                    <span class="meta-value pink">{{ game.plays }}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Similar Games -->
+    {% if similar_games %}
+    <div class="similar-section">
+        <h2 class="similar-title">MORE GAMES</h2>
+        <div class="similar-grid">
+            {% for sg in similar_games %}
+            <a href="{% url 'game_detail' sg.slug %}" class="similar-card">
+                <img src="{{ sg.get_cover_url }}" alt="{{ sg.title }}" class="similar-card-image">
+                <div class="similar-card-title">{{ sg.title }}</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{
+  "settings": {
+    "sfx_volume": 0.7,
+    "music_volume": 0.5,
+    "difficulty": 1.0,
+    "screen_shake": true
+  },
+  "achievements": {
+    "first_rock": false,
+    "asteroid_10": false,
+    "asteroid_50": false,
+    "asteroid_200": false,
+    "level_3": false,
+    "level_5": false,
+    "level_10": false,
+    "score_5000": false,
+    "score_20000": false,
+    "score_50000": false,
+    "ufo_kill": false,
+    "ufo_5": false,
+    "hyperspace": false,
+    "power_5": false,
+    "survive_2min": false
+  },
+  "highscore": 0,
+  "game_history": [
+    {
+      "score": 0,
+      "level": 1,
+      "duration": 5,
+      "date": "2026-09-13 17:02",
+      "achievements": []
+    }
+  ],
+  "total_asteroids": 0,
+  "total_ufos": 0
+}

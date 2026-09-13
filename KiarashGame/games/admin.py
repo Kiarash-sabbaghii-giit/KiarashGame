@@ -4,7 +4,7 @@ from .models import Game, UserProfile, PlayHistory
 
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('order', 'title', 'slug', 'plays', 'created_at')
+    list_display = ('order', 'title', 'slug', 'game_file', 'cover_image', 'demo_gif', 'plays')
     list_editable = ('plays',)
     search_fields = ('title',)
     prepopulated_fields = {'slug': ('title',)}

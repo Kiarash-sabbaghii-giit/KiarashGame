@@ -1,0 +1,40 @@
+{
+  "settings": {
+    "sfx_volume": 0.7,
+    "music_volume": 0.5,
+    "difficulty": 1.0,
+    "screen_shake": true
+  },
+  "achievements": {
+    "first_pellet": true,
+    "pellet_100": false,
+    "pellet_500": false,
+    "pellet_2000": false,
+    "first_ghost": false,
+    "ghost_10": false,
+    "ghost_50": false,
+    "ghost_100": false,
+    "level_2": false,
+    "level_5": false,
+    "level_10": false,
+    "score_5000": false,
+    "score_20000": false,
+    "combo_4": false,
+    "fruit_10": false
+  },
+  "highscore": 0,
+  "game_history": [
+    {
+      "score": 270,
+      "level": 1,
+      "duration": 16,
+      "date": "2026-09-13 17:03",
+      "achievements": [
+        "FIRST BITE"
+      ]
+    }
+  ],
+  "total_pellets": 27,
+  "total_ghosts": 0,
+  "total_fruits": 0
+}
