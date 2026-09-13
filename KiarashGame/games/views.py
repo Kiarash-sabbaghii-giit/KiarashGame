@@ -13,23 +13,24 @@ import sys
 
 
 def home(request):
-    """صفحه‌ی اصلی - نمایش همه بازی‌ها"""
     games = Game.objects.all()
 
-    # اطلاعات کاربر
+    # Search
+    query = request.GET.get('q', '').strip()
+    if query:
+        games = games.filter(title__icontains=query)
+
     context = {
         'games': games,
-        'total_games': games.count(),
-        'total_plays': sum(g.plays for g in games),
+        'total_games': Game.objects.count(),
+        'total_plays': sum(g.plays for g in Game.objects.all()),
+        'query': query,
     }
 
     if request.user.is_authenticated:
-        try:
-            profile = request.user.profile
-            context['profile'] = profile
-            context['user_history'] = PlayHistory.objects.filter(user=request.user)[:5]
-        except UserProfile.DoesNotExist:
-            UserProfile.objects.create(user=request.user)
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        context['profile'] = profile
+        context['user_history'] = PlayHistory.objects.filter(user=request.user)[:5]
 
     return render(request, 'games/home.html', context)
 

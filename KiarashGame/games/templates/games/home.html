@@ -3,9 +3,11 @@
 
 {% block extra_css %}
 <style>
+    /* ============ HERO ============ */
     .hero {
         text-align: center;
         padding: 5rem 2rem 3rem;
+        position: relative;
     }
 
     .hero-title {
@@ -13,41 +15,93 @@
         font-size: clamp(2.5rem, 6vw, 5rem);
         font-weight: 900;
         letter-spacing: 4px;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
         display: flex;
         justify-content: center;
         gap: 1.2rem;
         flex-wrap: wrap;
+        animation: title-float 6s ease-in-out infinite;
     }
 
+    @keyframes title-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    /* متن KIARASH — نور سایان کم و زیاد */
     .neon-text-cyan {
         color: var(--neon-cyan);
         text-shadow:
             0 0 10px var(--neon-cyan),
             0 0 30px var(--neon-cyan),
             0 0 60px var(--neon-cyan);
-        animation: flicker 3s infinite;
+        animation: pulse-cyan 3s ease-in-out infinite;
     }
 
+    @keyframes pulse-cyan {
+        0%, 100% {
+            color: var(--neon-cyan);
+            text-shadow:
+                0 0 10px var(--neon-cyan),
+                0 0 30px var(--neon-cyan),
+                0 0 60px var(--neon-cyan);
+        }
+        50% {
+            color: #ffffff;
+            text-shadow:
+                0 0 20px #ffffff,
+                0 0 50px var(--neon-cyan),
+                0 0 100px var(--neon-cyan),
+                0 0 150px var(--neon-cyan);
+        }
+    }
+
+    /* متن GAME — نور صورتی کم و زیاد (با تاخیر) */
     .neon-text-pink {
         color: var(--neon-pink);
         text-shadow:
             0 0 10px var(--neon-pink),
             0 0 30px var(--neon-pink),
             0 0 60px var(--neon-pink);
-        animation: flicker 3s infinite 0.5s;
+        animation: pulse-pink 3s ease-in-out infinite 1.5s;
     }
 
-    @keyframes flicker {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.85; }
+    @keyframes pulse-pink {
+        0%, 100% {
+            color: var(--neon-pink);
+            text-shadow:
+                0 0 10px var(--neon-pink),
+                0 0 30px var(--neon-pink),
+                0 0 60px var(--neon-pink);
+        }
+        50% {
+            color: #ffffff;
+            text-shadow:
+                0 0 20px #ffffff,
+                0 0 50px var(--neon-pink),
+                0 0 100px var(--neon-pink),
+                0 0 150px var(--neon-pink);
+        }
     }
 
+    /* زیرنویس با نور ملایم */
     .hero-subtitle {
         font-size: 1.3rem;
         color: var(--text-secondary);
         margin-bottom: 2.5rem;
         letter-spacing: 1px;
+        animation: subtitle-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes subtitle-glow {
+        0%, 100% {
+            color: var(--text-secondary);
+            text-shadow: 0 0 5px rgba(0, 230, 255, 0.3);
+        }
+        50% {
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 230, 255, 0.8), 0 0 30px rgba(179, 0, 255, 0.5);
+        }
     }
 
     .hero-stats {
@@ -62,6 +116,23 @@
         flex-direction: column;
         align-items: center;
         gap: 0.3rem;
+        position: relative;
+    }
+
+    /* خط زیر آمار با انیمیشن RGB */
+    .stat-item::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple));
+        background-size: 200% 100%;
+        border-radius: 2px;
+        opacity: 0.7;
+        animation: rgb-sweep 3s linear infinite;
     }
 
     .stat-value {
@@ -70,6 +141,18 @@
         font-weight: 900;
         color: var(--neon-cyan);
         text-shadow: 0 0 20px var(--neon-cyan);
+        animation: stat-pulse 2.5s ease-in-out infinite;
+    }
+
+    .stat-item:nth-child(2) .stat-value {
+        animation-delay: 0.5s;
+        color: var(--neon-pink);
+        text-shadow: 0 0 20px var(--neon-pink);
+    }
+
+    @keyframes stat-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.08); }
     }
 
     .stat-label {
@@ -79,12 +162,14 @@
         font-weight: 600;
     }
 
+    /* ============ GAMES SECTION ============ */
     .games-section {
         max-width: 1400px;
         margin: 0 auto;
         padding: 2rem;
     }
 
+    /* عنوان GAMES با نور متحرک */
     .section-title {
         display: flex;
         align-items: center;
@@ -93,17 +178,83 @@
         font-family: 'Orbitron', sans-serif;
         font-size: 2rem;
         font-weight: 700;
-        color: #fff;
         margin-bottom: 3rem;
         letter-spacing: 3px;
+        color: #fff;
+        animation: section-title-glow 3s ease-in-out infinite;
     }
 
+    @keyframes section-title-glow {
+        0%, 100% {
+            color: #ffffff;
+            text-shadow:
+                0 0 10px rgba(0, 230, 255, 0.5),
+                0 0 20px rgba(0, 230, 255, 0.3);
+        }
+        50% {
+            color: var(--neon-cyan);
+            text-shadow:
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-cyan),
+                0 0 60px var(--neon-pink);
+        }
+    }
+
+    /* خطوط کنار عنوان با RGB animation */
     .section-line {
         flex: 1;
         height: 2px;
-        background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+        background: linear-gradient(90deg,
+            transparent,
+            var(--neon-cyan),
+            var(--neon-pink),
+            var(--neon-purple),
+            transparent);
+        background-size: 200% 100%;
         box-shadow: 0 0 15px var(--neon-cyan);
         max-width: 200px;
+        animation: rgb-sweep 3s linear infinite;
+    }
+
+    .section-line:last-child {
+        animation-direction: reverse;
+    }
+
+    /* ============ SEARCH RESULT INFO ============ */
+    .search-info {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: rgba(0, 230, 255, 0.05);
+        border: 1px solid rgba(0, 230, 255, 0.2);
+        border-radius: 12px;
+        animation: slideIn 0.4s ease-out;
+    }
+
+    .search-info-text {
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+
+    .search-info-text strong {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 10px var(--neon-cyan);
+        font-weight: 700;
+    }
+
+    .search-info-clear {
+        display: inline-block;
+        margin-top: 0.5rem;
+        color: var(--neon-pink);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+
+    .search-info-clear:hover {
+        color: var(--neon-yellow);
+        text-shadow: 0 0 10px var(--neon-yellow);
     }
 
     .games-grid {
@@ -112,6 +263,7 @@
         gap: 2rem;
     }
 
+    /* ============ GAME CARD ============ */
     .game-card {
         background: var(--dark-card);
         border-radius: 16px;
@@ -119,6 +271,19 @@
         position: relative;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         border: 1px solid rgba(0, 230, 255, 0.15);
+        opacity: 0;
+        animation: card-fade-in 0.6s ease-out forwards;
+    }
+
+    @keyframes card-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .game-card:hover {
@@ -128,6 +293,40 @@
             0 20px 40px rgba(0, 0, 0, 0.5),
             0 0 30px rgba(0, 230, 255, 0.35),
             0 0 60px rgba(179, 0, 255, 0.2);
+    }
+
+    /* هاله RGB دور کارت هنگام hover */
+    .game-card::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 16px;
+        padding: 2px;
+        background: linear-gradient(45deg,
+            var(--neon-cyan),
+            var(--neon-pink),
+            var(--neon-purple),
+            var(--neon-cyan));
+        background-size: 300% 300%;
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.4s;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .game-card:hover::before {
+        opacity: 1;
+        animation: rgb-rotate 3s linear infinite;
+    }
+
+    @keyframes rgb-rotate {
+        from { background-position: 0% 50%; }
+        to { background-position: 300% 50%; }
     }
 
     .card-image-wrapper {
@@ -161,6 +360,7 @@
     .card-content {
         padding: 1.2rem;
         position: relative;
+        z-index: 1;
     }
 
     .card-title {
@@ -170,7 +370,7 @@
         color: #fff;
         margin-bottom: 0.5rem;
         letter-spacing: 1px;
-        transition: color 0.3s;
+        transition: all 0.3s;
     }
 
     .game-card:hover .card-title {
@@ -209,6 +409,7 @@
         justify-content: center;
         padding: 0.55rem 1.4rem;
         background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+        background-size: 200% 200%;
         color: #000;
         text-decoration: none;
         border-radius: 8px;
@@ -217,31 +418,21 @@
         letter-spacing: 1.5px;
         transition: all 0.3s;
         box-shadow: 0 0 15px rgba(0, 230, 255, 0.4);
+        animation: gradient-shift 4s ease infinite;
     }
 
     .play-btn:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 30px rgba(0, 230, 255, 0.8);
+        box-shadow:
+            0 0 30px rgba(0, 230, 255, 0.8),
+            0 0 50px rgba(179, 0, 255, 0.5);
     }
 
     .play-btn-locked {
         background: linear-gradient(135deg, #444, #666);
         color: #ccc;
         box-shadow: none;
-    }
-
-    .card-border {
-        position: absolute;
-        inset: 0;
-        border-radius: 16px;
-        border: 2px solid transparent;
-        pointer-events: none;
-        transition: border-color 0.4s;
-    }
-
-    .game-card:hover .card-border {
-        border-color: rgba(0, 230, 255, 0.5);
-        box-shadow: inset 0 0 30px rgba(0, 230, 255, 0.15);
+        animation: none;
     }
 
     .empty-state {
@@ -255,6 +446,12 @@
         font-weight: 700;
         color: var(--text-secondary);
         margin-bottom: 0.5rem;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
     }
 </style>
 {% endblock %}
@@ -281,15 +478,26 @@
 </section>
 
 <section class="games-section">
+
+    {% if query %}
+    <div class="search-info">
+        <p class="search-info-text">
+            Found <strong>{{ games.count }}</strong> result{{ games.count|pluralize }} for
+            <strong>"{{ query }}"</strong>
+        </p>
+        <a href="{% url 'home' %}" class="search-info-clear">✕ Clear search</a>
+    </div>
+    {% else %}
     <h2 class="section-title">
         <span class="section-line"></span>
         <span>GAMES</span>
         <span class="section-line"></span>
     </h2>
+    {% endif %}
 
     <div class="games-grid">
         {% for game in games %}
-        <div class="game-card">
+        <div class="game-card" style="animation-delay: {{ forloop.counter0 }}00ms;">
             <div class="card-image-wrapper">
                 <img src="{{ game.get_cover_url }}" alt="{{ game.title }}" class="card-image">
                 <div class="card-overlay"></div>
@@ -315,13 +523,20 @@
                     {% endif %}
                 </div>
             </div>
-
-            <div class="card-border"></div>
         </div>
         {% empty %}
         <div class="empty-state">
-            <p class="empty-title">No games yet</p>
-            <p>Go to the admin panel and add games.</p>
+            <div class="empty-icon">🔍</div>
+            <p class="empty-title">
+                {% if query %}No games found{% else %}No games yet{% endif %}
+            </p>
+            <p>
+                {% if query %}
+                    Try a different search term
+                {% else %}
+                    Go to the admin panel and add games.
+                {% endif %}
+            </p>
         </div>
         {% endfor %}
     </div>
