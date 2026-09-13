@@ -16,7 +16,7 @@ try:
 except:
     AUDIO_OK = False
 
-BASE_W, BASE_H = 900, 900
+BASE_W, BASE_H = 900, 950
 WIDTH, HEIGHT = BASE_W, BASE_H
 
 screen = pygame.display.set_mode((BASE_W, BASE_H), pygame.RESIZABLE)
@@ -46,10 +46,9 @@ GHOST_PINK = (255, 100, 180)
 GHOST_CYAN = (100, 200, 255)
 GHOST_ORANGE = (255, 180, 50)
 GHOST_SCARED = (50, 50, 200)
-GHOST_FLASH = (255, 255, 255)
 
 # --- ابعاد Maze ---
-CELL_SIZE = 30
+CELL_SIZE = 32
 COLS = 21
 ROWS = 23
 MAZE_W = COLS * CELL_SIZE
@@ -58,31 +57,30 @@ MAZE_X = (WIDTH - MAZE_W) // 2
 MAZE_Y = (HEIGHT - MAZE_H) // 2 + 20
 
 # --- Maze Layout ---
-# 0 = خالی (path), 1 = دیوار, 2 = pellet, 3 = power pellet
-# 4 = در خونه ارواح
+# 0 = خالی، 1 = دیوار، 2 = pellet، 3 = power pellet، 4 = در خونه ارواح
 MAZE = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1],
     [1,3,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,3,1],
-    [1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1],
-    [1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,2,1,1,1,2,1,1,1,2,1,2,1,1,1,2,1,1,1,2,1],
+    [1,2,1,1,1,2,1,1,1,2,1,2,1,1,1,2,1,1,1,2,1],
     [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+    [1,2,1,1,1,2,1,2,1,1,1,1,1,2,1,2,1,1,1,2,1],
+    [1,2,2,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2,1],
+    [1,1,1,1,1,2,1,1,1,0,1,0,1,1,1,2,1,1,1,1,1],
+    [1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1],
+    [1,1,1,1,1,2,1,0,1,1,4,1,1,0,1,2,1,1,1,1,1],
+    [0,0,0,0,0,2,0,0,1,0,0,0,1,0,0,2,0,0,0,0,0],
+    [1,1,1,1,1,2,1,0,1,1,1,1,1,0,1,2,1,1,1,1,1],
+    [1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1],
+    [1,1,1,1,1,2,1,0,1,1,1,1,1,0,1,2,1,1,1,1,1],
     [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+    [1,2,1,1,1,2,1,1,1,2,1,2,1,1,1,2,1,1,1,2,1],
+    [1,3,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,3,1],
+    [1,1,1,2,1,2,1,2,1,1,1,1,1,2,1,2,1,2,1,1,1],
+    [1,2,2,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2,1],
+    [1,2,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,2,1],
     [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
-    [1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
-    [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
-    [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
-    [1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1],
-    [1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1],
-    [1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1],
-    [1,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,1],
-    [1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,1],
+    [1,2,1,1,1,2,1,1,1,2,1,2,1,1,1,2,1,1,1,2,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ]
 
@@ -286,7 +284,6 @@ def build_sounds():
     sounds['levelup'] = make_sound(400, 1500, 0.6, 0.25, 'sine')
     sounds['gameover'] = make_sound(500, 60, 1.5, 0.30, 'saw')
     sounds['click'] = make_sound(800, 1200, 0.05, 0.15, 'square')
-    sounds['ghost_move'] = make_sound(150, 200, 0.1, 0.08, 'square')
 
     bass = [73.4, 73.4, 82.4, 82.4, 65.4, 65.4, 73.4, 73.4]
     lead = [523, 587, 659, 587, 523, 494, 440, 494]
@@ -380,30 +377,27 @@ def spawn_particles(x, y, color, count, speed_mult=1.0, size_mult=1.0, life_mult
 
 
 # ============================================================
-#                    Game State
+#                    Maze Functions
 # ============================================================
-class GameState:
-    def __init__(self):
-        self.maze = [row[:] for row in MAZE]
-        self.pellets_left = sum(1 for row in self.maze for c in row if c == 2 or c == 3)
-        self.power_timer = 0
-        self.ghost_combo = 0
-        self.level = 1
-        self.score = 0
-        self.arcade_timer = 0
+def is_wall_cell(gx, gy, maze):
+    """چک کن آیا این سلول دیواره"""
+    if gx < 0 or gx >= COLS or gy < 0 or gy >= ROWS:
+        return True
+    return maze[gy][gx] == 1
 
 
 # ============================================================
 #                    Pac-Man
 # ============================================================
 class PacMan:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.start_x = x
-        self.start_y = y
+    def __init__(self, gx, gy):
+        self.gx = gx  # موقعیت شبکه‌ای
+        self.gy = gy
+        self.start_gx = gx
+        self.start_gy = gy
+        self.px = MAZE_X + gx * CELL_SIZE + CELL_SIZE / 2  # پیکسل
+        self.py = MAZE_Y + gy * CELL_SIZE + CELL_SIZE / 2
         self.radius = CELL_SIZE * 0.4
-        self.speed = 3.0
         self.dx = 0
         self.dy = 0
         self.next_dx = 0
@@ -413,103 +407,121 @@ class PacMan:
         self.alive = True
         self.death_anim = 0
         self.moving = False
-
-    def grid_pos(self):
-        return (int(self.x), int(self.y))
-
-    def is_wall(self, gx, gy, maze):
-        if gx < 0 or gx >= COLS or gy < 0 or gy >= ROWS:
-            return True
-        return maze[gy][gx] == 1
-
-    def can_move(self, dx, dy, maze):
-        if dx == 0 and dy == 0:
-            return False
-        # موقعیت جدید
-        new_gx = self.x + dx * self.speed
-        new_gy = self.y + dy * self.speed
-        # چک خونه‌ی جدید
-        cx = int(round(new_gx))
-        cy = int(round(new_gy))
-        if self.is_wall(cx, cy, maze):
-            return False
-        return True
-
-    def update(self, maze, keys, power_mode):
-        if not self.alive:
-            self.death_anim += 1
-            return
-
-        # ورودی
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.next_dx = -1
-            self.next_dy = 0
-        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.next_dx = 1
-            self.next_dy = 0
-        elif keys[pygame.K_UP] or keys[pygame.K_w]:
-            self.next_dx = 0
-            self.next_dy = -1
-        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            self.next_dx = 0
-            self.next_dy = 1
-
-        # سرعت بر اساس power mode
-        self.speed = 3.2 if power_mode else 3.0
-
-        # تلاش برای حرکت در جهت بعدی
-        if self.next_dx != 0 or self.next_dy != 0:
-            if self.can_move(self.next_dx, self.next_dy, maze):
-                self.dx = self.next_dx
-                self.dy = self.next_dy
-
-        # حرکت در جهت فعلی
-        if self.can_move(self.dx, self.dy, maze):
-            self.x += self.dx * self.speed
-            self.y += self.dy * self.speed
-            self.moving = True
-        else:
-            # اسنپ به مرکز خونه
-            self.moving = False
-
-        # انیمیشن دهان
-        if self.moving:
-            self.anim_timer += 0.3
-            self.mouth_angle = abs(math.sin(self.anim_timer)) * 40
-        else:
-            self.mouth_angle = 20
-
-        # Wrap tunnel (ردیف وسط)
-        if self.x < -0.5:
-            self.x = COLS - 0.5
-        elif self.x > COLS - 0.5:
-            self.x = -0.5
+        self.move_progress = 0  # 0..1 برای حرکت نرم بین سلول‌ها
+        self.base_speed = 0.09  # سرعت پایه (کمتر = آرام‌تر)
+        self.speed = self.base_speed
 
     def reset_position(self):
-        self.x = self.start_x
-        self.y = self.start_y
+        self.gx = self.start_gx
+        self.gy = self.start_gy
+        self.px = MAZE_X + self.gx * CELL_SIZE + CELL_SIZE / 2
+        self.py = MAZE_Y + self.gy * CELL_SIZE + CELL_SIZE / 2
         self.dx = 0
         self.dy = 0
         self.next_dx = 0
         self.next_dy = 0
         self.alive = True
         self.death_anim = 0
+        self.move_progress = 0
 
-    def pixel_pos(self):
-        return (MAZE_X + self.x * CELL_SIZE + CELL_SIZE / 2,
-                MAZE_Y + self.y * CELL_SIZE + CELL_SIZE / 2)
-
-    def draw(self, surface):
-        px, py = self.pixel_pos()
-
+    def update(self, maze, keys, power_mode):
         if not self.alive:
-            # انیمیشن مرگ - کوچک شدن
-            r = max(0, self.radius - self.death_anim * 0.5)
-            if r > 0:
-                pygame.draw.circle(surface, NEON_YELLOW, (int(px), int(py)), int(r))
+            self.death_anim += 1
             return
 
-        # زاویه بر اساس جهت
+        # سرعت
+        self.speed = 0.11 if power_mode else self.base_speed
+
+        # ورودی
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            if self.dx != 1:
+                self.next_dx = -1
+                self.next_dy = 0
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            if self.dx != -1:
+                self.next_dx = 1
+                self.next_dy = 0
+        elif keys[pygame.K_UP] or keys[pygame.K_w]:
+            if self.dy != 1:
+                self.next_dx = 0
+                self.next_dy = -1
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            if self.dy != -1:
+                self.next_dx = 0
+                self.next_dy = 1
+
+        # اگه در وسط سلول هستیم (move_progress == 0)
+        if self.move_progress == 0:
+            # چک کن می‌تونه در جهت بعدی بره
+            if self.next_dx != 0 or self.next_dy != 0:
+                nx = self.gx + self.next_dx
+                ny = self.gy + self.next_dy
+                if not is_wall_cell(nx, ny, maze):
+                    self.dx = self.next_dx
+                    self.dy = self.next_dy
+
+            # اگه در جهت فعلی دیواره، متوقف شو
+            if self.dx != 0 or self.dy != 0:
+                nx = self.gx + self.dx
+                ny = self.gy + self.dy
+                if is_wall_cell(nx, ny, maze):
+                    self.dx = 0
+                    self.dy = 0
+                    self.moving = False
+
+            # شروع حرکت
+            if self.dx != 0 or self.dy != 0:
+                self.move_progress = 0.001
+                self.moving = True
+            else:
+                self.moving = False
+
+        # ادامه حرکت
+        if self.move_progress > 0:
+            self.move_progress += self.speed
+            if self.move_progress >= 1.0:
+                # رسیدیم به سلول بعدی
+                self.gx += self.dx
+                self.gy += self.dy
+                self.move_progress = 0
+
+                # Wrap tunnel
+                if self.gx < 0:
+                    self.gx = COLS - 1
+                elif self.gx >= COLS:
+                    self.gx = 0
+
+            # موقعیت پیکسل
+            if self.move_progress > 0:
+                offset_x = self.gx * CELL_SIZE + self.dx * self.move_progress * CELL_SIZE
+                offset_y = self.gy * CELL_SIZE + self.dy * self.move_progress * CELL_SIZE
+            else:
+                offset_x = self.gx * CELL_SIZE
+                offset_y = self.gy * CELL_SIZE
+            self.px = MAZE_X + offset_x + CELL_SIZE / 2
+            self.py = MAZE_Y + offset_y + CELL_SIZE / 2
+
+        # انیمیشن دهان
+        if self.moving:
+            self.anim_timer += 0.25
+            self.mouth_angle = abs(math.sin(self.anim_timer)) * 40
+        else:
+            self.mouth_angle = 20
+
+    def get_cell(self):
+        """سلول فعلی Pac-Man"""
+        if self.move_progress > 0.5:
+            return (self.gx + self.dx, self.gy + self.dy)
+        return (self.gx, self.gy)
+
+    def draw(self, surface):
+        if not self.alive:
+            r = max(0, self.radius - self.death_anim * 0.4)
+            if r > 0:
+                pygame.draw.circle(surface, NEON_YELLOW, (int(self.px), int(self.py)), int(r))
+            return
+
+        # جهت
         base_angle = 0
         if self.dx > 0:
             base_angle = 0
@@ -520,50 +532,45 @@ class PacMan:
         elif self.dy > 0:
             base_angle = 270
 
-        # رسم Pac-Man (دایره با مثلث بریده)
         mouth = self.mouth_angle
         if self.dx == 0 and self.dy == 0:
             mouth = 20
 
-        # محاسبه نقاط
         start_angle = math.radians(base_angle + mouth)
         end_angle = math.radians(base_angle + 360 - mouth)
 
         # هاله
         for r in range(3, 0, -1):
-            glow_size = self.radius * 2 + r * 8
+            glow_size = int(self.radius * 2 + r * 8)
             glow = pygame.Surface((glow_size, glow_size), pygame.SRCALPHA)
             pygame.draw.circle(glow, (*NEON_YELLOW, 50 - r * 15),
                                (glow_size // 2, glow_size // 2), glow_size // 2)
-            surface.blit(glow, (px - glow_size // 2, py - glow_size // 2))
+            surface.blit(glow, (self.px - glow_size // 2, self.py - glow_size // 2))
 
         # بدنه
-        points = [(px, py)]
+        points = [(self.px, self.py)]
         steps = 20
         for i in range(steps + 1):
             a = start_angle + (end_angle - start_angle) * i / steps
-            x = px + math.cos(a) * self.radius
-            y = py + math.sin(a) * self.radius
+            x = self.px + math.cos(a) * self.radius
+            y = self.py + math.sin(a) * self.radius
             points.append((x, y))
-        points.append((px, py))
+        points.append((self.px, self.py))
 
         pygame.draw.polygon(surface, NEON_YELLOW, points)
         pygame.draw.polygon(surface, WHITE, points, 2)
 
         # چشم
-        eye_offset = 6
-        eye_x = px + math.cos(math.radians(base_angle + 90)) * 0
-        # ساده: چشم رو در جهت حرکت بذار
         if self.dx > 0:
-            eye_x, eye_y = px + 4, py - 5
+            eye_x, eye_y = self.px + 4, self.py - 5
         elif self.dx < 0:
-            eye_x, eye_y = px - 4, py - 5
+            eye_x, eye_y = self.px - 4, self.py - 5
         elif self.dy < 0:
-            eye_x, eye_y = px + 3, py - 5
+            eye_x, eye_y = self.px + 3, self.py - 5
         elif self.dy > 0:
-            eye_x, eye_y = px + 3, py + 3
+            eye_x, eye_y = self.px + 3, self.py + 3
         else:
-            eye_x, eye_y = px + 3, py - 5
+            eye_x, eye_y = self.px + 3, self.py - 5
 
         pygame.draw.circle(surface, WHITE, (int(eye_x), int(eye_y)), 3)
         pygame.draw.circle(surface, BLACK, (int(eye_x), int(eye_y)), 1.5)
@@ -573,19 +580,25 @@ class PacMan:
 #                    Ghost
 # ============================================================
 class Ghost:
-    def __init__(self, x, y, kind='blinky'):
-        self.x = x
-        self.y = y
-        self.start_x = x
-        self.start_y = y
+    def __init__(self, gx, gy, kind='blinky'):
+        self.gx = gx
+        self.gy = gy
+        self.start_gx = gx
+        self.start_gy = gy
+        self.px = MAZE_X + gx * CELL_SIZE + CELL_SIZE / 2
+        self.py = MAZE_Y + gy * CELL_SIZE + CELL_SIZE / 2
         self.kind = kind
-        self.speed = 2.8
+        self.radius = CELL_SIZE * 0.4
         self.dx = 0
         self.dy = -1
         self.alive = True
         self.scared = False
-        self.eaten = False  # برمی‌گرده به خونه
+        self.eaten = False
         self.anim_timer = 0
+        self.base_speed = 0.07  # کمی آرام‌تر از Pac-Man
+        self.speed = self.base_speed
+        self.move_progress = 0
+        self.decision_made = False
 
         colors = {
             'blinky': GHOST_RED,
@@ -595,135 +608,167 @@ class Ghost:
         }
         self.color = colors[kind]
 
-    def grid_pos(self):
-        return (int(self.x), int(self.y))
+    def reset(self):
+        self.gx = self.start_gx
+        self.gy = self.start_gy
+        self.px = MAZE_X + self.gx * CELL_SIZE + CELL_SIZE / 2
+        self.py = MAZE_Y + self.gy * CELL_SIZE + CELL_SIZE / 2
+        self.dx = 0
+        self.dy = -1
+        self.eaten = False
+        self.scared = False
+        self.move_progress = 0
+        self.decision_made = False
 
-    def is_wall(self, gx, gy, maze):
-        if gx < 0 or gx >= COLS or gy < 0 or gy >= ROWS:
-            return True
-        return maze[gy][gx] == 1
-
-    def can_move(self, dx, dy, maze):
-        if dx == 0 and dy == 0:
-            return False
-        new_gx = self.x + dx * self.speed
-        new_gy = self.y + dy * self.speed
-        cx = int(round(new_gx))
-        cy = int(round(new_gy))
-        if self.is_wall(cx, cy, maze):
-            return False
-        return True
-
-    def get_target(self, pacman, blinky_pos, clyde_pos):
-        px, py = pacman.x, pacman.y
+    def get_target(self, pacman, blinky, clyde):
+        px, py = pacman.gx, pacman.gy
 
         if self.kind == 'blinky':
-            # مستقیم تعقیب
             return (px, py)
         elif self.kind == 'pinky':
             # 4 خونه جلوتر
             return (px + pacman.dx * 4, py + pacman.dy * 4)
         elif self.kind == 'inky':
-            # رفتار پیچیده: بر اساس بلینکی
-            bx, by = blinky_pos
-            # نقطه 2 خونه جلوتر
+            bx, by = blinky.gx, blinky.gy
             target_x = px + pacman.dx * 2
             target_y = py + pacman.dy * 2
-            # آینه نسبت به بلینکی
             return (target_x * 2 - bx, target_y * 2 - by)
         elif self.kind == 'clyde':
-            # اگه دور، تعقیب کن؛ اگه نزدیک، فرار
-            dist = math.hypot(px - self.x, py - self.y)
+            dist = math.hypot(px - self.gx, py - self.gy)
             if dist > 8:
                 return (px, py)
             else:
                 return (1, ROWS - 2)
 
-    def update(self, maze, pacman, blinky_pos, clyde_pos, power_mode):
+    def choose_direction(self, maze, pacman, blinky, clyde):
+        """انتخاب بهترین جهت در تقاطع"""
+        # جهت‌های ممکن (نه معکوس)
+        possible = []
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            if dx == -self.dx and dy == -self.dy:
+                continue
+            nx = self.gx + dx
+            ny = self.gy + dy
+            # Wrap tunnel
+            if nx < 0: nx = COLS - 1
+            if nx >= COLS: nx = 0
+            if not is_wall_cell(nx, ny, maze):
+                possible.append((dx, dy, nx, ny))
+
+        if not possible:
+            return
+
+        target = self.get_target(pacman, blinky, clyde)
+        tx, ty = target
+
+        # انتخاب نزدیک‌ترین
+        best = None
+        best_dist = float('inf')
+        for dx, dy, nx, ny in possible:
+            d = (nx - tx) ** 2 + (ny - ty) ** 2
+            if d < best_dist:
+                best_dist = d
+                best = (dx, dy)
+
+        if best:
+            self.dx, self.dy = best
+
+    def update(self, maze, pacman, blinky, clyde, power_mode):
         if not self.alive:
             return
 
         # اگه خورده شده، به خونه برگرده
         if self.eaten:
-            # مستقیم به مرکز
             target_x = COLS // 2
             target_y = 10
-            dx = target_x - self.x
-            dy = target_y - self.y
+            dx = target_x - self.gx
+            dy = target_y - self.gy
             dist = math.hypot(dx, dy)
-            if dist < 0.3:
+            if dist < 0.2:
                 self.eaten = False
                 self.scared = False
-                self.x = target_x
-                self.y = target_y
+                self.gx = target_x
+                self.gy = target_y
+                self.dx = 0
+                self.dy = -1
+                self.move_progress = 0
+                self.px = MAZE_X + self.gx * CELL_SIZE + CELL_SIZE / 2
+                self.py = MAZE_Y + self.gy * CELL_SIZE + CELL_SIZE / 2
                 return
-            self.x += dx / dist * self.speed
-            self.y += dy / dist * self.speed
+
+            # حرکت مستقیم
+            self.move_progress += 0.1
+            if self.move_progress > 1.0:
+                self.move_progress = 0
+                # حرکت در جهت هدف
+                if abs(dx) > abs(dy):
+                    self.gx += 1 if dx > 0 else -1
+                else:
+                    self.gy += 1 if dy > 0 else -1
+            # موقعیت پیکسل
+            if self.move_progress > 0:
+                nx = target_x - dx * (1 - self.move_progress)
+                ny = target_y - dy * (1 - self.move_progress)
+                self.px = MAZE_X + nx * CELL_SIZE + CELL_SIZE / 2
+                self.py = MAZE_Y + ny * CELL_SIZE + CELL_SIZE / 2
             return
 
+        # سرعت
+        if power_mode:
+            self.speed = self.base_speed * 0.6
+        else:
+            self.speed = self.base_speed
+
+        # اگه در وسط سلول هستیم
+        if self.move_progress == 0:
+            # تصمیم بگیر
+            self.choose_direction(maze, pacman, blinky, clyde)
+            # شروع حرکت
+            self.move_progress = 0.001
+
+        # ادامه حرکت
+        if self.move_progress > 0:
+            self.move_progress += self.speed
+            if self.move_progress >= 1.0:
+                self.gx += self.dx
+                self.gy += self.dy
+                self.move_progress = 0
+
+                # Wrap tunnel
+                if self.gx < 0: self.gx = COLS - 1
+                elif self.gx >= COLS: self.gx = 0
+
+            # موقعیت پیکسل
+            if self.move_progress > 0:
+                offset_x = self.gx * CELL_SIZE + self.dx * self.move_progress * CELL_SIZE
+                offset_y = self.gy * CELL_SIZE + self.dy * self.move_progress * CELL_SIZE
+            else:
+                offset_x = self.gx * CELL_SIZE
+                offset_y = self.gy * CELL_SIZE
+            self.px = MAZE_X + offset_x + CELL_SIZE / 2
+            self.py = MAZE_Y + offset_y + CELL_SIZE / 2
+
         self.anim_timer += 0.1
-        self.speed = 2.8 if not power_mode else 2.2
-
-        # انتخاب مسیر
-        # سر هر خونه، تصمیم می‌گیره
-        cx, cy = int(round(self.x)), int(round(self.y))
-        if abs(self.x - cx) < 0.1 and abs(self.y - cy) < 0.1:
-            # می‌تونه تصمیم بگیره
-            target = self.get_target(pacman, blinky_pos, clyde_pos)
-            possible = []
-            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                # معکوس نرو
-                if dx == -self.dx and dy == -self.dy:
-                    continue
-                if not self.is_wall(cx + dx, cy + dy, maze):
-                    # فاصله به هدف
-                    tx, ty = target
-                    dist = (cx + dx - tx) ** 2 + (cy + dy - ty) ** 2
-                    possible.append((dist, dx, dy))
-            if possible:
-                possible.sort()
-                # با یه کم رندوم
-                if len(possible) > 1 and random.random() < 0.15:
-                    chosen = random.choice(possible[:2])
-                else:
-                    chosen = possible[0]
-                self.dx = chosen[1]
-                self.dy = chosen[2]
-
-        # حرکت
-        if self.can_move(self.dx, self.dy, maze):
-            self.x += self.dx * self.speed
-            self.y += self.dy * self.speed
-
-        # Wrap
-        if self.x < -0.5:
-            self.x = COLS - 0.5
-        elif self.x > COLS - 0.5:
-            self.x = -0.5
-
-    def reset(self):
-        self.x = self.start_x
-        self.y = self.start_y
-        self.dx = 0
-        self.dy = -1
-        self.eaten = False
-        self.scared = False
-
-    def pixel_pos(self):
-        return (MAZE_X + self.x * CELL_SIZE + CELL_SIZE / 2,
-                MAZE_Y + self.y * CELL_SIZE + CELL_SIZE / 2)
 
     def draw(self, surface, power_mode):
         if not self.alive:
             return
 
-        px, py = self.pixel_pos()
-        r = CELL_SIZE * 0.4
+        r = self.radius
 
         # رنگ
         if self.eaten:
-            color = (100, 100, 100)
-        elif self.scared:
+            # فقط چشم‌ها
+            eye_offset = r * 0.3
+            eye_y = self.py - 4
+            for ex in [self.px - eye_offset, self.px + eye_offset]:
+                pygame.draw.circle(surface, WHITE, (int(ex), int(eye_y)), 5)
+                pupil_x = ex + self.dx * 2
+                pupil_y = eye_y + self.dy * 2
+                pygame.draw.circle(surface, BLACK, (int(pupil_x), int(pupil_y)), 2.5)
+            return
+
+        if self.scared:
             # چشمک سفید/آبی
             if power_mode and (pygame.time.get_ticks() // 200) % 2 == 0:
                 color = WHITE
@@ -734,26 +779,25 @@ class Ghost:
 
         # هاله
         for hr in range(3, 0, -1):
-            glow_size = r * 2 + hr * 8
+            glow_size = int(r * 2 + hr * 8)
             glow = pygame.Surface((glow_size, glow_size), pygame.SRCALPHA)
             pygame.draw.circle(glow, (*color, 50 - hr * 15),
                                (glow_size // 2, glow_size // 2), glow_size // 2)
-            surface.blit(glow, (px - glow_size // 2, py - glow_size // 2))
+            surface.blit(glow, (self.px - glow_size // 2, self.py - glow_size // 2))
 
-        # بدنه روح (شبیه به نیم‌دایره با پای چین‌دار)
+        # بدنه روح
         # نیم‌دایره بالا
-        pygame.draw.circle(surface, color, (int(px), int(py - 2)), int(r))
+        pygame.draw.circle(surface, color, (int(self.px), int(self.py - 2)), int(r))
         # مستطیل پایین
-        bottom_rect = pygame.Rect(int(px - r), int(py - 2), int(r * 2), int(r))
+        bottom_rect = pygame.Rect(int(self.px - r), int(self.py - 2), int(r * 2), int(r))
         pygame.draw.rect(surface, color, bottom_rect)
         # چین‌های پایین
-        wave_y = py - 2 + r
+        wave_y = self.py - 2 + r
         wave_amp = 4
         wave_count = 4
-        # ساده‌سازی: مثلث‌های کوچک
         for i in range(wave_count):
-            x1 = px - r + (i * 2 * r / wave_count)
-            x2 = px - r + ((i + 1) * 2 * r / wave_count)
+            x1 = self.px - r + (i * 2 * r / wave_count)
+            x2 = self.px - r + ((i + 1) * 2 * r / wave_count)
             xm = (x1 + x2) / 2
             pygame.draw.polygon(surface, color, [
                 (x1, wave_y),
@@ -762,21 +806,18 @@ class Ghost:
             ])
 
         # حاشیه
-        pygame.draw.circle(surface, WHITE, (int(px), int(py - 2)), int(r), 2)
+        pygame.draw.circle(surface, WHITE, (int(self.px), int(self.py - 2)), int(r), 2)
 
         # چشم‌ها
         eye_offset = r * 0.3
-        eye_y = py - 4
+        eye_y = self.py - 4
         if self.scared:
-            # چشم‌های ترسیده
-            for ex in [px - eye_offset, px + eye_offset]:
+            for ex in [self.px - eye_offset, self.px + eye_offset]:
                 pygame.draw.circle(surface, WHITE, (int(ex), int(eye_y)), 4)
                 pygame.draw.circle(surface, color, (int(ex), int(eye_y)), 2)
         else:
-            # چشم‌های عادی
-            for ex in [px - eye_offset, px + eye_offset]:
+            for ex in [self.px - eye_offset, self.px + eye_offset]:
                 pygame.draw.circle(surface, WHITE, (int(ex), int(eye_y)), 5)
-                # مردمک در جهت حرکت
                 pupil_x = ex + self.dx * 2
                 pupil_y = eye_y + self.dy * 2
                 pygame.draw.circle(surface, BLACK, (int(pupil_x), int(pupil_y)), 2.5)
@@ -786,12 +827,11 @@ class Ghost:
 #                    Fruit
 # ============================================================
 class Fruit:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.life = 600  # 10 ثانیه
+    def __init__(self, gx, gy):
+        self.gx = gx
+        self.gy = gy
+        self.life = 600
         self.pulse = 0
-        # میوه‌های مختلف
         self.kind = random.choice(['cherry', 'strawberry', 'orange', 'apple', 'melon'])
         self.score_value = {
             'cherry': 100,
@@ -805,12 +845,9 @@ class Fruit:
         self.life -= 1
         self.pulse += 0.15
 
-    def pixel_pos(self):
-        return (MAZE_X + self.x * CELL_SIZE + CELL_SIZE / 2,
-                MAZE_Y + self.y * CELL_SIZE + CELL_SIZE / 2)
-
     def draw(self, surface):
-        px, py = self.pixel_pos()
+        px = MAZE_X + self.gx * CELL_SIZE + CELL_SIZE / 2
+        py = MAZE_Y + self.gy * CELL_SIZE + CELL_SIZE / 2
         r = CELL_SIZE * 0.35 + math.sin(self.pulse) * 2
 
         colors = {
@@ -822,7 +859,6 @@ class Fruit:
         }
         color = colors[self.kind]
 
-        # هاله
         for hr in range(3, 0, -1):
             glow_size = int(r * 2 + hr * 8)
             glow = pygame.Surface((glow_size, glow_size), pygame.SRCALPHA)
@@ -830,7 +866,6 @@ class Fruit:
                                (glow_size // 2, glow_size // 2), glow_size // 2)
             surface.blit(glow, (px - glow_size // 2, py - glow_size // 2))
 
-        # بدنه
         pygame.draw.circle(surface, color, (int(px), int(py)), int(r))
         pygame.draw.circle(surface, WHITE, (int(px), int(py)), int(r), 2)
 
@@ -843,7 +878,7 @@ class Fruit:
 
 
 # ============================================================
-#                    Button
+#                    Button & Slider
 # ============================================================
 class Button:
     def __init__(self, x, y, w, h, text, color, hover_color=None, text_size=28):
@@ -901,9 +936,6 @@ class Button:
         return False
 
 
-# ============================================================
-#                    Slider
-# ============================================================
 class Slider:
     def __init__(self, x, y, w, h, value, min_v, max_v, label):
         self.rect = pygame.Rect(x - w // 2, y - h // 2, w, h)
@@ -999,27 +1031,32 @@ def get_game_mouse_pos():
 
 
 # ============================================================
-#                    پس‌زمینه
+#                    Draw Maze
 # ============================================================
-def draw_maze(surface, maze, power_mode, power_timer):
-    # هاله‌ی دیوارها
+def draw_maze(surface, maze, power_mode):
+    # دیوارها
     for y in range(ROWS):
         for x in range(COLS):
             if maze[y][x] == 1:
                 px = MAZE_X + x * CELL_SIZE
                 py = MAZE_Y + y * CELL_SIZE
+
                 # هاله
-                glow = pygame.Surface((CELL_SIZE + 20, CELL_SIZE + 20), pygame.SRCALPHA)
-                pygame.draw.rect(glow, (*NEON_BLUE, 50), (0, 0, CELL_SIZE + 20, CELL_SIZE + 20),
+                glow = pygame.Surface((CELL_SIZE + 16, CELL_SIZE + 16), pygame.SRCALPHA)
+                pygame.draw.rect(glow, (*NEON_BLUE, 60),
+                                 (0, 0, CELL_SIZE + 16, CELL_SIZE + 16),
                                  border_radius=6)
-                surface.blit(glow, (px - 10, py - 10))
-                # بدنه
-                rect = pygame.Rect(px, py, CELL_SIZE, CELL_SIZE)
-                pygame.draw.rect(surface, (10, 20, 60), rect)
-                pygame.draw.rect(surface, NEON_BLUE, rect, 2)
-                # درخشش لبه
-                pygame.draw.line(surface, NEON_CYAN, (rect.x, rect.y),
-                                 (rect.right, rect.y), 2)
+                surface.blit(glow, (px - 8, py - 8))
+
+                # بدنه دیوار
+                rect = pygame.Rect(px + 2, py + 2, CELL_SIZE - 4, CELL_SIZE - 4)
+                pygame.draw.rect(surface, (15, 25, 65), rect, border_radius=4)
+                pygame.draw.rect(surface, NEON_BLUE, rect, 2, border_radius=4)
+
+                # خط درخشان
+                pygame.draw.line(surface, NEON_CYAN,
+                                 (rect.x + 2, rect.y + 2),
+                                 (rect.right - 2, rect.y + 2), 2)
 
     # Pellet‌ها
     for y in range(ROWS):
@@ -1030,13 +1067,14 @@ def draw_maze(surface, maze, power_mode, power_timer):
 
             if cell == 2:
                 # Pellet عادی
-                pygame.draw.circle(surface, NEON_YELLOW, (int(px), int(py)), 3)
-                pygame.draw.circle(surface, WHITE, (int(px), int(py)), 3, 1)
+                pulse = 1 + math.sin(pygame.time.get_ticks() / 300 + x + y) * 0.3
+                r = int(3 * pulse)
+                pygame.draw.circle(surface, NEON_YELLOW, (int(px), int(py)), r)
+                pygame.draw.circle(surface, WHITE, (int(px), int(py)), r, 1)
             elif cell == 3:
                 # Power Pellet
-                pulse = 1 + math.sin(pygame.time.get_ticks() / 200) * 0.3
+                pulse = 1 + math.sin(pygame.time.get_ticks() / 200) * 0.4
                 r = int(8 * pulse)
-                # هاله
                 for hr in range(3, 0, -1):
                     glow_size = r * 2 + hr * 6
                     glow = pygame.Surface((glow_size, glow_size), pygame.SRCALPHA)
@@ -1065,29 +1103,21 @@ def show_menu():
         menu_time += 1
         mouse_pos = get_game_mouse_pos()
 
-        # آسمان گرادیان
         for y in range(0, HEIGHT, 4):
             alpha = int(80 * (1 - y / HEIGHT))
             s = pygame.Surface((WIDTH, 4), pygame.SRCALPHA)
             s.fill((10, 20, 50, alpha))
             game_surface.blit(s, (0, y))
 
-        # Maze کوچیک تزئینی - Pac-Man و 4 روح شناور
-        for _ in range(3):
-            px = random.randint(50, WIDTH - 50)
-            py = random.randint(50, HEIGHT - 50)
-
         # Pac-Man تزئینی
         pac_x = 200 + math.sin(t) * 100
         pac_y = 400 + math.cos(t * 1.3) * 50
-        # هاله
         for hr in range(3, 0, -1):
             glow_size = 40 + hr * 8
             glow = pygame.Surface((glow_size, glow_size), pygame.SRCALPHA)
             pygame.draw.circle(glow, (*NEON_YELLOW, 50 - hr * 15),
                                (glow_size // 2, glow_size // 2), glow_size // 2)
             game_surface.blit(glow, (pac_x - glow_size // 2, pac_y - glow_size // 2))
-        # Pac-Man
         mouth = abs(math.sin(t * 5)) * 40
         points = [(pac_x, pac_y)]
         for i in range(21):
@@ -1104,14 +1134,12 @@ def show_menu():
             (GHOST_ORANGE, WIDTH - 200 + math.cos(t * 1.4) * 50, 460),
         ]
         for color, gx, gy in ghost_data:
-            # هاله
             for hr in range(3, 0, -1):
                 glow_size = 30 + hr * 8
                 glow = pygame.Surface((glow_size, glow_size), pygame.SRCALPHA)
                 pygame.draw.circle(glow, (*color, 50 - hr * 15),
                                    (glow_size // 2, glow_size // 2), glow_size // 2)
                 game_surface.blit(glow, (gx - glow_size // 2, gy - glow_size // 2))
-            # بدنه
             r = 15
             pygame.draw.circle(game_surface, color, (int(gx), int(gy - 2)), r)
             rect = pygame.Rect(int(gx - r), int(gy - 2), r * 2, r)
@@ -1125,7 +1153,6 @@ def show_menu():
                     (xm, gy - 2 + r + 4),
                     (x2, gy - 2 + r),
                 ])
-            # چشم
             for ex in [gx - 5, gx + 5]:
                 pygame.draw.circle(game_surface, WHITE, (int(ex), int(gy - 4)), 4)
                 pygame.draw.circle(game_surface, BLACK, (int(ex), int(gy - 4)), 2)
@@ -1454,22 +1481,31 @@ def show_history():
 #                    بازی اصلی
 # ============================================================
 def play_game():
-    gs = GameState()
+    # کپی maze برای این بازی
+    maze = [row[:] for row in MAZE]
+    pellets_left = sum(1 for row in maze for c in row if c == 2 or c == 3)
 
-    # Pac-Man در موقعیت شروع (وسط پایین)
-    pacman = PacMan(COLS // 2, 17)
+    # Pac-Man در موقعیت شروع (ردیف 17، ستون 10)
+    pacman = PacMan(10, 17)
 
-    # ارواح
+    # ارواح (داخل خونه)
     ghosts = [
-        Ghost(COLS // 2 - 2, 10, 'blinky'),
-        Ghost(COLS // 2, 10, 'pinky'),
-        Ghost(COLS // 2 + 2, 10, 'inky'),
-        Ghost(COLS // 2 + 4, 10, 'clyde'),
+        Ghost(9, 10, 'blinky'),
+        Ghost(10, 10, 'pinky'),
+        Ghost(11, 10, 'inky'),
+        Ghost(12, 10, 'clyde'),
     ]
 
     # میوه
     fruits = []
     fruit_spawn_timer = 0
+
+    # امتیاز
+    score = 0
+    display_score = 0
+    level = 1
+    power_timer = 0
+    ghost_combo = 0
 
     # افکت‌ها
     screen_shake = 0
@@ -1477,7 +1513,6 @@ def play_game():
     game_over = False
     paused = False
     final_score = 0
-    final_level = 1
     new_achs = []
     notifications = []
     go_anim = 0
@@ -1485,9 +1520,6 @@ def play_game():
     total_frames = 0
     death_timer = 0
     level_banner_timer = 120
-
-    # کمبو
-    combo = 0
 
     btn_resume = Button(WIDTH // 2, HEIGHT // 2 + 20, 300, 60, "RESUME", NEON_GREEN, NEON_CYAN, 28)
     btn_pause_menu = Button(WIDTH // 2, HEIGHT // 2 + 100, 300, 55, "MAIN MENU", NEON_RED, NEON_ORANGE, 24)
@@ -1508,30 +1540,29 @@ def play_game():
         return False
 
     def save_current():
-        add_game_to_history(gs.score, gs.level, total_frames // FPS, new_achs)
+        add_game_to_history(score, level, total_frames // FPS, new_achs)
 
     def reset_level():
-        gs.maze = [row[:] for row in MAZE]
-        gs.pellets_left = sum(1 for row in gs.maze for c in row if c == 2 or c == 3)
-        gs.power_timer = 0
-        gs.ghost_combo = 0
+        nonlocal maze, pellets_left
+        maze = [row[:] for row in MAZE]
+        pellets_left = sum(1 for row in maze for c in row if c == 2 or c == 3)
         pacman.reset_position()
         for g in ghosts:
             g.reset()
         fruits.clear()
 
     def next_level():
-        nonlocal level_banner_timer
-        gs.level += 1
-        if gs.level >= 2: try_unlock('level_2')
-        if gs.level >= 5: try_unlock('level_5')
-        if gs.level >= 10: try_unlock('level_10')
+        nonlocal level, level_banner_timer
+        level += 1
+        if level >= 2: try_unlock('level_2')
+        if level >= 5: try_unlock('level_5')
+        if level >= 10: try_unlock('level_10')
         play_sound('levelup')
         level_banner_timer = 120
         reset_level()
         # سرعت ارواح با level
         for g in ghosts:
-            g.speed = 2.8 + (gs.level - 1) * 0.15
+            g.base_speed = 0.07 + (level - 1) * 0.005
 
     running = True
     while running:
@@ -1612,89 +1643,82 @@ def play_game():
             keys = pygame.key.get_pressed()
 
             # آپدیت Pac-Man
-            power_mode = gs.power_timer > 0
+            power_mode = power_timer > 0
             if pacman.alive:
-                pacman.update(gs.maze, keys, power_mode)
+                pacman.update(maze, keys, power_mode)
 
                 # خوردن pellet
-                gx = int(round(pacman.x))
-                gy = int(round(pacman.y))
-                if 0 <= gx < COLS and 0 <= gy < ROWS:
-                    cell = gs.maze[gy][gx]
+                cell_gx, cell_gy = pacman.get_cell()
+                if 0 <= cell_gx < COLS and 0 <= cell_gy < ROWS:
+                    cell = maze[cell_gy][cell_gx]
                     if cell == 2 or cell == 3:
-                        gs.maze[gy][gx] = 0
-                        gs.pellets_left -= 1
-                        pacman_px, pacman_py = pacman.pixel_pos()
+                        maze[cell_gy][cell_gx] = 0
+                        pellets_left -= 1
                         if cell == 2:
-                            gs.score += 10
+                            score += 10
                             total_pellets[0] += 1
                             play_sound('chomp')
-                            spawn_particles(pacman_px, pacman_py, NEON_YELLOW, 3, 0.8, 0.6, 0.5)
+                            spawn_particles(pacman.px, pacman.py, NEON_YELLOW, 3, 0.8, 0.6, 0.5)
                             if total_pellets[0] >= 1: try_unlock('first_pellet')
                             if total_pellets[0] >= 100: try_unlock('pellet_100')
                             if total_pellets[0] >= 500: try_unlock('pellet_500')
                             if total_pellets[0] >= 2000: try_unlock('pellet_2000')
                         else:  # Power pellet
-                            gs.score += 50
+                            score += 50
                             total_pellets[0] += 1
-                            gs.power_timer = 420  # 7 ثانیه
-                            gs.ghost_combo = 0
+                            power_timer = 420
+                            ghost_combo = 0
                             play_sound('power')
                             if settings['screen_shake']:
                                 screen_shake = 15
                             flash = 100
                             for _ in range(30):
-                                spawn_particles(pacman_px, pacman_py, NEON_PINK, 1, 1.5, 1.2, 1.2)
-                            # همه ارواح scared بشن
+                                spawn_particles(pacman.px, pacman.py, NEON_PINK, 1, 1.5, 1.2, 1.2)
                             for g in ghosts:
                                 if not g.eaten:
                                     g.scared = True
 
-                        if gs.score >= 5000: try_unlock('score_5000')
-                        if gs.score >= 20000: try_unlock('score_20000')
+                        if score >= 5000: try_unlock('score_5000')
+                        if score >= 20000: try_unlock('score_20000')
 
             # تایمر power
-            if gs.power_timer > 0:
-                gs.power_timer -= 1
-                if gs.power_timer == 0:
+            if power_timer > 0:
+                power_timer -= 1
+                if power_timer == 0:
                     for g in ghosts:
                         g.scared = False
-                    gs.ghost_combo = 0
+                    ghost_combo = 0
 
             # آپدیت ارواح
             if pacman.alive:
-                blinky_pos = (ghosts[0].x, ghosts[0].y)
-                clyde_pos = (ghosts[3].x, ghosts[3].y)
+                blinky = ghosts[0]
+                clyde = ghosts[3]
                 for g in ghosts:
-                    g.update(gs.maze, pacman, blinky_pos, clyde_pos, power_mode)
+                    g.update(maze, pacman, blinky, clyde, power_mode)
 
                     # برخورد با Pac-Man
                     if not g.eaten:
-                        dist = math.hypot(g.x - pacman.x, g.y - pacman.y)
-                        if dist < 0.7:
+                        dist = math.hypot(g.px - pacman.px, g.py - pacman.py)
+                        if dist < CELL_SIZE * 0.7:
                             if g.scared:
-                                # خوردن روح
                                 g.eaten = True
                                 g.scared = False
-                                gs.ghost_combo += 1
-                                combo = gs.ghost_combo
-                                points = 200 * (2 ** (gs.ghost_combo - 1))
-                                gs.score += points
+                                ghost_combo += 1
+                                points = 200 * (2 ** (ghost_combo - 1))
+                                score += points
                                 total_ghosts[0] += 1
                                 play_sound('eat_ghost')
                                 if settings['screen_shake']:
                                     screen_shake = 20
                                 flash = 150
-                                gx_px, gy_px = g.pixel_pos()
                                 for _ in range(40):
-                                    spawn_particles(gx_px, gy_px, g.color, 1, 1.8, 1.3, 1.3)
+                                    spawn_particles(g.px, g.py, g.color, 1, 1.8, 1.3, 1.3)
                                 if total_ghosts[0] >= 1: try_unlock('first_ghost')
                                 if total_ghosts[0] >= 10: try_unlock('ghost_10')
                                 if total_ghosts[0] >= 50: try_unlock('ghost_50')
                                 if total_ghosts[0] >= 100: try_unlock('ghost_100')
-                                if gs.ghost_combo >= 4: try_unlock('combo_4')
+                                if ghost_combo >= 4: try_unlock('combo_4')
                             else:
-                                # مرگ Pac-Man
                                 pacman.alive = False
                                 death_timer = 90
                                 play_sound('death')
@@ -1706,20 +1730,18 @@ def play_game():
             if not pacman.alive:
                 death_timer -= 1
                 if death_timer <= 0:
-                    # ریست
                     pacman.reset_position()
                     for g in ghosts:
                         g.reset()
-                    gs.power_timer = 0
-                    gs.ghost_combo = 0
+                    power_timer = 0
+                    ghost_combo = 0
 
             # اسپاون میوه
             fruit_spawn_timer += 1
             if fruit_spawn_timer > FPS * 15:
                 fruit_spawn_timer = 0
                 if len(fruits) < 2:
-                    # موقعیت مرکز
-                    fruits.append(Fruit(COLS // 2, 14))
+                    fruits.append(Fruit(10, 14))
 
             # آپدیت میوه‌ها
             for f in fruits[:]:
@@ -1727,12 +1749,12 @@ def play_game():
                 if f.life <= 0:
                     fruits.remove(f)
                     continue
-                # خوردن
-                if abs(f.x - pacman.x) < 0.6 and abs(f.y - pacman.y) < 0.6:
-                    gs.score += f.score_value
+                if abs(f.gx - pacman.gx) < 1 and abs(f.gy - pacman.gy) < 1:
+                    score += f.score_value
                     total_fruits[0] += 1
                     play_sound('eat_fruit')
-                    fx, fy = f.pixel_pos()
+                    fx = MAZE_X + f.gx * CELL_SIZE + CELL_SIZE / 2
+                    fy = MAZE_Y + f.gy * CELL_SIZE + CELL_SIZE / 2
                     for _ in range(25):
                         spawn_particles(fx, fy, NEON_GREEN, 1, 1.5, 1.2, 1.2)
                     if total_fruits[0] >= 10:
@@ -1740,7 +1762,7 @@ def play_game():
                     fruits.remove(f)
 
             # چک تموم شدن
-            if gs.pellets_left <= 0:
+            if pellets_left <= 0:
                 next_level()
 
             # آپدیت ذرات
@@ -1749,13 +1771,18 @@ def play_game():
                 if not p.active:
                     active_particles.remove(p)
 
-            # افکت‌ها
             if screen_shake > 0:
                 screen_shake -= 1
             if flash > 0:
                 flash -= 8
             if level_banner_timer > 0:
                 level_banner_timer -= 1
+
+            # آپدیت اسکور نمایشی
+            if display_score < score:
+                display_score += max(1, (score - display_score) // 5)
+                if display_score > score:
+                    display_score = score
 
         # ============================================================
         #                    رسم
@@ -1773,8 +1800,8 @@ def play_game():
             play_layer.blit(s, (0, y))
 
         # Maze
-        power_mode = gs.power_timer > 0
-        draw_maze(play_layer, gs.maze, power_mode, gs.power_timer)
+        power_mode = power_timer > 0
+        draw_maze(play_layer, maze, power_mode)
 
         # میوه‌ها
         for f in fruits:
@@ -1808,34 +1835,33 @@ def play_game():
                   11, 25, 45, (180, 200, 220))
 
         draw_text(game_surface, "SCORE", 14, WIDTH - 25, 12, NEON_CYAN)
-        draw_text(game_surface, f"{gs.score}", 26, WIDTH - 25, 30, WHITE, glow=True)
-        draw_text(game_surface, f"LEVEL: {gs.level}", 16, WIDTH - 25, 62, NEON_GREEN)
-        draw_text(game_surface, f"PELLETS: {gs.pellets_left}", 14, WIDTH - 25, 84, NEON_YELLOW)
-
-        # Combo
-        if combo > 1 and gs.power_timer > 0:
-            combo_color = NEON_GREEN if combo < 3 else NEON_YELLOW if combo < 4 else NEON_PINK
-            scale = 1 + math.sin(t * 10) * 0.1
-            draw_text(game_surface, f"x{combo} GHOST COMBO", int(28 * scale), WIDTH // 2, HEIGHT // 2 - 100,
-                      combo_color, center=True, glow=True)
+        draw_text(game_surface, f"{display_score}", 26, WIDTH - 25, 30, WHITE, glow=True)
+        draw_text(game_surface, f"LEVEL: {level}", 16, WIDTH - 25, 62, NEON_GREEN)
+        draw_text(game_surface, f"PELLETS: {pellets_left}", 14, WIDTH - 25, 84, NEON_YELLOW)
 
         # Power mode indicator
-        if gs.power_timer > 0:
-            power_alpha = min(255, gs.power_timer * 3)
+        if power_timer > 0:
             bar_w = 200
             bar_x = WIDTH // 2 - bar_w // 2
             bar_y = HEIGHT - 30
             pygame.draw.rect(game_surface, (40, 10, 40), (bar_x, bar_y, bar_w, 10))
-            ratio = gs.power_timer / 420
+            ratio = power_timer / 420
             pygame.draw.rect(game_surface, NEON_PINK, (bar_x, bar_y, bar_w * ratio, 10))
             pygame.draw.rect(game_surface, WHITE, (bar_x, bar_y, bar_w, 10), 2)
             draw_text(game_surface, "POWER MODE!", 14, WIDTH // 2, bar_y - 20,
                       NEON_PINK, center=True, glow=True)
 
+        # Combo
+        if ghost_combo > 1 and power_timer > 0:
+            combo_color = NEON_GREEN if ghost_combo < 3 else NEON_YELLOW if ghost_combo < 4 else NEON_PINK
+            scale = 1 + math.sin(t * 10) * 0.1
+            draw_text(game_surface, f"x{ghost_combo} GHOST COMBO", int(28 * scale), WIDTH // 2, HEIGHT // 2 - 100,
+                      combo_color, center=True, glow=True)
+
         # Banner
         if level_banner_timer > 0:
             size = 60 + int(math.sin(t * 10) * 5)
-            draw_text(game_surface, f"LEVEL {gs.level}", size, WIDTH // 2, HEIGHT // 2 - 50,
+            draw_text(game_surface, f"LEVEL {level}", size, WIDTH // 2, HEIGHT // 2 - 50,
                       NEON_CYAN, center=True, glow=True)
             draw_text(game_surface, "GET READY!", 30, WIDTH // 2, HEIGHT // 2 + 20,
                       WHITE, center=True)
@@ -1867,12 +1893,12 @@ def play_game():
             pygame.draw.rect(game_surface, NEON_CYAN, (box_x + 5, box_y + 5, box_w - 10, box_h - 10), 1)
             draw_text(game_surface, "GAME OVER", 60, WIDTH // 2, box_y + 55,
                       NEON_RED, center=True, glow=True)
-            draw_text(game_surface, f"SCORE: {final_score if final_score else gs.score}", 32,
+            draw_text(game_surface, f"SCORE: {final_score if final_score else score}", 32,
                       WIDTH // 2, box_y + 120, WHITE, center=True)
-            draw_text(game_surface, f"LEVEL: {gs.level}   GHOSTS: {total_ghosts[0]}",
+            draw_text(game_surface, f"LEVEL: {level}   GHOSTS: {total_ghosts[0]}",
                       16, WIDTH // 2, box_y + 160, NEON_CYAN, center=True)
             hs = highscore[0]
-            if gs.score >= hs and gs.score > 0:
+            if score >= hs and score > 0:
                 draw_text(game_surface, "* NEW HIGH SCORE! *", 22, WIDTH // 2, box_y + 195,
                           NEON_YELLOW, center=True, glow=True)
             else:
